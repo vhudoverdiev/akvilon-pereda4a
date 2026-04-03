@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}{{ object_name }} — Отдел передач Аквилон{% endblock %}
+{% block content %}
+<section class="dashboard-head">
+    <div>
+        <div class="eyebrow">Объект</div>
+        <h2>{{ object_name }}</h2>
+        <p>Раздел: <strong>Запуск объекта</strong></p>
+    </div>
+    <div class="stats-card">
+        <span>Записей в таблице</span>
+        <strong>{{ records|length }}</strong>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="form-card">
+        <div class="section-title-row">
+            <h3>Добавить запись</h3>
+            <span class="soft-pill">Запуск объекта</span>
+        </div>
+
+        <form method="post" action="{{ url_for('add_record') }}" class="grid-form">
+            <label>
+                <span>Номер квартиры</span>
+                <input type="text" name="apartment_number" placeholder="Например: 101" required>
+            </label>
+            <label>
+                <span>Стекла</span>
+                <input type="text" name="glass" placeholder="Например: установлены" required>
+            </label>
+            <label>
+                <span>Пол</span>
+                <input type="text" name="floor" placeholder="Например: ламинат" required>
+            </label>
+            <label>
+                <span>Потолок</span>
+                <input type="text" name="ceiling" placeholder="Например: покраска" required>
+            </label>
+            <label class="full-width">
+                <span>Дополнительные</span>
+                <textarea name="additional" rows="4" placeholder="Любые дополнительные замечания"></textarea>
+            </label>
+            <button type="submit" class="primary-btn">Добавить в таблицу</button>
+        </form>
+    </div>
+
+    <div class="table-card">
+        <div class="section-title-row">
+            <h3>Таблица запуска объекта</h3>
+            <span class="soft-pill">Квартал 100-7</span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>№ квартиры</th>
+                        <th>Стекла</th>
+                        <th>Пол</th>
+                        <th>Потолок</th>
+                        <th>Дополнительные</th>
+                        <th>Дата</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if records %}
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record.apartment_number }}</td>
+                            <td>{{ record.glass }}</td>
+                            <td>{{ record.floor }}</td>
+                            <td>{{ record.ceiling }}</td>
+                            <td>{{ record.additional or '—' }}</td>
+                            <td>{{ record.created_at }}</td>
+                            <td>
+                                <form method="post" action="{{ url_for('delete_record', record_id=record.id) }}">
+                                    <button type="submit" class="danger-btn">Удалить</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                Пока записей нет. Добавьте первую запись через форму слева.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

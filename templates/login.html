@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Вход — Отдел передач Аквилон{% endblock %}
+{% block content %}
+<section class="login-layout">
+    <div class="hero-card">
+        <span class="badge">Админ-панель</span>
+        <h2>Отдел передач — Аквилон</h2>
+        <p>
+            Панель управления объектом <strong>Квартал 100-7</strong>.
+            Здесь можно вести запуск объекта и контролировать таблицу по квартирам.
+        </p>
+        <ul class="feature-list">
+            <li>Авторизация по логину и паролю</li>
+            <li>Раздел «Запуск объекта»</li>
+            <li>Добавление записей прямо из формы</li>
+            <li>Современный стеклянный дизайн</li>
+        </ul>
+    </div>
+
+    <div class="form-card narrow">
+        <h3>Вход в систему</h3>
+        <form method="post" class="grid-form single-column">
+            <label>
+                <span>Логин</span>
+                <input type="text" name="login" placeholder="Введите логин" required>
+            </label>
+            <label>
+                <span>Пароль</span>
+                <input type="password" name="password" placeholder="Введите пароль" required>
+            </label>
+            <button type="submit" class="primary-btn">Войти</button>
+        </form>
+
+        <div class="hint-box">
+            <div><strong>Тестовый логин:</strong> admin</div>
+            <div><strong>Тестовый пароль:</strong> aquilon123</div>
+            <small>Позже поменяйте их в файле <code>app.py</code> или через переменные окружения.</small>
+        </div>
+    </div>
+</section>
+{% endblock %}
