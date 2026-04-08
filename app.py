@@ -3,8 +3,10 @@ from __future__ import annotations
 import json
 import os
 import sqlite3
+from ipaddress import ip_address
 from functools import wraps
 from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 
 from flask import Flask, flash, g, redirect, render_template, request, session, url_for
 
@@ -70,6 +72,17 @@ DEFAULT_TABS = [
 ]
 
 
+def _is_ip_host(host: str) -> bool:
+    host_name = host.split(":", 1)[0].strip("[]")
+    if not host_name:
+        return False
+    try:
+        ip_address(host_name)
+        return True
+    except ValueError:
+        return False
+
+
 def get_db() -> sqlite3.Connection:
     if "db" not in g:
         g.db = sqlite3.connect(DATABASE)
@@ -131,6 +144,30 @@ def close_db(exception: Exception | None) -> None:
     db = g.pop("db", None)
     if db is not None:
         db.close()
+
+
+@app.after_request
+def keep_ip_host_redirects(response):
+    """
+    If a redirect target was generated with a canonical domain, but the user
+    came via direct IP, keep redirects on the same IP host.
+    """
+    location = response.headers.get("Location")
+    if not location:
+        return response
+
+    request_host = request.host
+    if not _is_ip_host(request_host):
+        return response
+
+    target = urlsplit(location)
+    if not target.netloc:
+        return response
+
+    response.headers["Location"] = urlunsplit(
+        (target.scheme or request.scheme, request_host, target.path, target.query, target.fragment)
+    )
+    return response
 
 
 def login_required(view_func):
