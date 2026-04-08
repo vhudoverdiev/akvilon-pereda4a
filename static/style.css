@@ -425,3 +425,54 @@ th {
     .grid-form,
     .metrics-four { grid-template-columns: 1fr; }
 }
+
+.single-column { grid-template-columns: 1fr; }
+.objects-layout { grid-template-columns: 360px 1fr; }
+
+.object-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.object-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    background: #fff;
+    text-decoration: none;
+    display: grid;
+    gap: 6px;
+    transition: 0.2s ease;
+}
+
+.object-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(125, 216, 33, 0.6);
+    box-shadow: 0 12px 20px rgba(16, 20, 25, 0.08);
+}
+
+.object-card-title { font-weight: 700; color: #1c2128; }
+
+.tabs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tab-chip {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 12px;
+    text-decoration: none;
+    background: #f8f8fa;
+    color: #3d434c;
+    font-size: 0.9rem;
+}
+
+.tab-chip.active {
+    background: var(--corp-green);
+    color: #1f2024;
+    border-color: transparent;
+    font-weight: 600;
+}
