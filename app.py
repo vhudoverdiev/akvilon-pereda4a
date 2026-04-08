@@ -9,11 +9,13 @@ from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
 
 from flask import Flask, flash, g, redirect, render_template, request, session, url_for
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE = BASE_DIR / "database.db"
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "aquilon-dev-secret-change-me")
 app.config["ADMIN_LOGIN"] = os.environ.get("ADMIN_LOGIN", "admin")
 app.config["ADMIN_PASSWORD"] = os.environ.get("ADMIN_PASSWORD", "aquilon123")
@@ -81,6 +83,24 @@ def _is_ip_host(host: str) -> bool:
         return True
     except ValueError:
         return False
+
+
+def _extract_host(raw_host: str | None) -> str:
+    if not raw_host:
+        return ""
+    return raw_host.split(",", 1)[0].strip()
+
+
+def _get_original_request_host() -> str:
+    forwarded_host = _extract_host(request.headers.get("X-Forwarded-Host"))
+    if forwarded_host:
+        return forwarded_host
+
+    original_host = _extract_host(request.headers.get("X-Original-Host"))
+    if original_host:
+        return original_host
+
+    return request.host
 
 
 def get_db() -> sqlite3.Connection:
@@ -156,7 +176,7 @@ def keep_ip_host_redirects(response):
     if not location:
         return response
 
-    request_host = request.host
+    request_host = _get_original_request_host()
     if not _is_ip_host(request_host):
         return response
 
