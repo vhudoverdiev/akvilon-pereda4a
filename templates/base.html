@@ -10,24 +10,53 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="page-shell">
-        <div class="aurora aurora-1"></div>
-        <div class="aurora aurora-2"></div>
-        <div class="aurora aurora-3"></div>
-
-        {% if session.get('admin_logged_in') %}
-        <header class="topbar">
-            <div>
-                <div class="eyebrow">Отдел передач</div>
-                <h1>Аквилон</h1>
+    {% if session.get('admin_logged_in') %}
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <h1><span class="brand-main">Аквилон</span><span class="brand-sub">Разумный девелопмент</span></h1>
             </div>
-            <nav class="topbar-actions">
-                <a class="ghost-btn" href="{{ url_for('object_dashboard') }}">Квартал 100-7</a>
-                <a class="ghost-btn" href="{{ url_for('logout') }}">Выйти</a>
-            </nav>
-        </header>
-        {% endif %}
 
+            <div class="search-box">Поиск...</div>
+
+            <nav class="side-nav">
+                <a class="side-link active" href="{{ url_for('object_dashboard') }}">Обзор объекта</a>
+                <a class="side-link" href="#">Аналитика</a>
+                <a class="side-link" href="#">Клиенты</a>
+                <a class="side-link" href="#">Настройки</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a class="side-link muted" href="{{ url_for('logout') }}">Выйти</a>
+            </div>
+        </aside>
+
+        <div class="content-shell">
+            <header class="topbar">
+                <div>
+                    <div class="eyebrow">Отдел передач</div>
+                    <p class="greeting">Здравствуйте! Управление объектом в одном окне.</p>
+                </div>
+                <a class="ghost-btn" href="{{ url_for('object_dashboard') }}">Квартал 100-7</a>
+            </header>
+
+            <main>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alerts">
+                            {% for category, message in messages %}
+                                <div class="alert {{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    {% else %}
+    <div class="login-shell">
         <main>
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -42,5 +71,6 @@
             {% block content %}{% endblock %}
         </main>
     </div>
+    {% endif %}
 </body>
 </html>
