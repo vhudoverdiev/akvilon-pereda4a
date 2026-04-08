@@ -50,6 +50,10 @@
 
         <div class="content-shell">
             <main>
+    {% else %}
+    <div class="login-shell">
+        <main>
+    {% endif %}
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         <div class="alerts">
@@ -60,28 +64,12 @@
                     {% endif %}
                 {% endwith %}
 
-                {{ self.page_content() }}
-            </main>
-        </div>
-    </div>
-    {% else %}
-    <div class="login-shell">
-        <main>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="alerts">
-                        {% for category, message in messages %}
-                            <div class="alert {{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-
-            {{ self.page_content() }}
+                {% block page_content %}{% endblock %}
         </main>
     </div>
+
+    {% if session.get('admin_logged_in') %}
+        </div>
     {% endif %}
 </body>
 </html>
-
-{% block page_content %}{% endblock %}
