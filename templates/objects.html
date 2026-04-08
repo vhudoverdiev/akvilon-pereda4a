@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Объекты — Отдел передач Аквилон{% endblock %}
+{% block page_content %}
+<section class="hero-panel card">
+    <div>
+        <h2>Объекты</h2>
+        <p>Выберите объект, чтобы открыть вкладки и вносить данные по таблицам.</p>
+    </div>
+</section>
+
+<section class="dashboard-grid objects-layout">
+    <div class="form-card card">
+        <div class="section-title-row">
+            <h3>Добавить объект</h3>
+            <span class="soft-pill">Новый объект</span>
+        </div>
+        <form method="post" action="{{ url_for('add_object') }}" class="grid-form single-column">
+            <label>
+                <span>Название объекта</span>
+                <input type="text" name="name" placeholder="Например: Квартал 101-1" required>
+            </label>
+            <button type="submit" class="primary-btn">Добавить объект</button>
+        </form>
+    </div>
+
+    <div class="table-card card">
+        <div class="section-title-row">
+            <h3>Карточки объектов</h3>
+            <span class="soft-pill">{{ objects|length }} шт.</span>
+        </div>
+
+        <div class="object-cards-grid">
+            {% for object_item in objects %}
+            <a class="object-card" href="{{ url_for('object_dashboard', object_id=object_item.id) }}">
+                <div class="object-card-title">{{ object_item.name }}</div>
+                <small>Открыть вкладки Excel →</small>
+            </a>
+            {% else %}
+            <div class="empty-state">Объектов пока нет. Добавьте первый объект слева.</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

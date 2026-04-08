@@ -26,10 +26,10 @@
 
             <div class="menu-caption">Main menu</div>
             <nav class="side-nav">
-                <a class="side-link active" href="{{ url_for('object_dashboard') }}"><span>◧</span>Business Overview</a>
-                <a class="side-link" href="#"><span>◔</span>Analytics</a>
-                <a class="side-link" href="#"><span>◍</span>Business Explore</a>
-                <a class="side-link" href="#"><span>◎</span>Customers</a>
+                <a class="side-link active" href="{{ url_for('objects_page') }}"><span>◧</span>Объекты</a>
+                <a class="side-link" href="#"><span>◔</span>Вкладки Excel</a>
+                <a class="side-link" href="#"><span>◍</span>Таблицы</a>
+                <a class="side-link" href="{{ url_for('logout') }}"><span>◎</span>Выйти</a>
             </nav>
 
             <div class="menu-caption">Settings</div>
@@ -60,7 +60,7 @@
                     {% endif %}
                 {% endwith %}
 
-                {% block content %}{% endblock %}
+                {{ self.page_content() }}
             </main>
         </div>
     </div>
@@ -77,9 +77,11 @@
                 {% endif %}
             {% endwith %}
 
-            {% block content %}{% endblock %}
+            {{ self.page_content() }}
         </main>
     </div>
     {% endif %}
 </body>
 </html>
+
+{% block page_content %}{% endblock %}

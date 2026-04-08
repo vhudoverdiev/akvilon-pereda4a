@@ -1,160 +1,88 @@
 {% extends 'base.html' %}
-{% block title %}{{ object_name }} — Отдел передач Аквилон{% endblock %}
-{% block content %}
+{% block title %}{{ object_item.name }} — Отдел передач Аквилон{% endblock %}
+{% block page_content %}
 <section class="hero-panel card">
     <div>
-        <h2>Hello, <em>Anthony!</em></h2>
-        <p>Here’s your overview of your business!</p>
-    </div>
-    <div class="hero-actions">
-        <button class="circle-btn" type="button">◔</button>
-        <button class="circle-btn" type="button">🔔</button>
-        <div class="profile-mini">
-            <div class="avatar">A</div>
-            <div>
-                <strong>Anthony Alverizko</strong>
-                <small>anthony.alve@gmail.com</small>
-            </div>
-        </div>
+        <h2>{{ object_item.name }}</h2>
+        <p>Вкладки и столбцы собраны по структуре вашей Excel-таблицы.</p>
     </div>
 </section>
 
-<section class="metrics-grid metrics-four">
-    <article class="metric-card card">
-        <div class="metric-row"><span>Total Customers</span><i>◍</i></div>
-        <strong>21.978</strong>
-        <small class="up">↗ +15% from the last month</small>
-    </article>
-    <article class="metric-card card">
-        <div class="metric-row"><span>Active Customers</span><i>◌</i></div>
-        <strong>10.369</strong>
-        <small class="down">↘ -9% from the last month</small>
-    </article>
-    <article class="metric-card card">
-        <div class="metric-row"><span>Profit Total</span><i>◔</i></div>
-        <strong>$64.981,97</strong>
-        <small class="up">↗ +7.2% from the last month</small>
-    </article>
-    <article class="metric-card card">
-        <div class="metric-row"><span>Expense Total</span><i>◔</i></div>
-        <strong>$18.158,21</strong>
-        <small class="down">↘ -2% from the last month</small>
-    </article>
+<section class="card">
+    <div class="tabs-row">
+        {% for tab in tabs %}
+            <a class="tab-chip {% if tab.slug == active_tab %}active{% endif %}"
+               href="{{ url_for('object_dashboard', object_id=object_item.id, tab=tab.slug) }}">
+                {{ tab.name }}
+            </a>
+        {% endfor %}
+    </div>
 </section>
 
-<section class="overview-grid">
-    <div class="chart-card card">
-        <div class="section-title-row">
-            <h3>Sales Overview</h3>
-            <span class="soft-pill">Month ▾</span>
-        </div>
-        <div class="bars with-grid">
-            <span style="--h: 72%"></span><span style="--h: 58%"></span><span style="--h: 40%"></span><span style="--h: 49%"></span>
-            <span style="--h: 65%"></span><span style="--h: 82%"></span><span style="--h: 53%"></span><span style="--h: 63%"></span>
-            <span style="--h: 37%"></span><span style="--h: 44%"></span><span style="--h: 57%"></span><span style="--h: 68%"></span>
-        </div>
-    </div>
-
-    <div class="stack-col">
-        <div class="calendar-card card">
-            <h3>January 2023</h3>
-            <div class="calendar-grid">
-                <span>8</span><span>9</span><span>10</span><span class="active">11</span><span>12</span><span>13</span><span>14</span>
-            </div>
-        </div>
-        <div class="schedule-card card">
+{% for tab in tabs %}
+    {% if tab.slug == active_tab %}
+    <section class="dashboard-grid">
+        <div class="form-card card">
             <div class="section-title-row">
-                <h3>Upcoming Schedule</h3>
-                <span>···</span>
+                <h3>Добавить запись</h3>
+                <span class="soft-pill">{{ tab.name }}</span>
             </div>
-            <ul>
-                <li><strong>09:30 AM</strong><span>Business Analytics Press</span></li>
-                <li><strong>10:35 AM</strong><span>Business Sprint</span></li>
-                <li><strong>1:15 PM</strong><span>Customer Review Meeting</span></li>
-                <li><strong>2:45 PM</strong><span>Daily Office Meeting</span></li>
-            </ul>
-        </div>
-    </div>
-</section>
 
-<section class="dashboard-grid">
-    <div class="form-card card">
-        <div class="section-title-row">
-            <h3>Добавить запись</h3>
-            <span class="soft-pill">Запуск объекта</span>
+            <form method="post" action="{{ url_for('add_tab_row', object_id=object_item.id, tab_id=tab.id) }}" class="grid-form">
+                {% for col in tab.columns %}
+                <label>
+                    <span>{{ col }}</span>
+                    <input type="text" name="col::{{ col }}" placeholder="Введите значение">
+                </label>
+                {% endfor %}
+                <button type="submit" class="primary-btn full-width">Добавить запись</button>
+            </form>
         </div>
 
-        <form method="post" action="{{ url_for('add_record') }}" class="grid-form">
-            <label>
-                <span>Номер квартиры</span>
-                <input type="text" name="apartment_number" placeholder="Например: 101" required>
-            </label>
-            <label>
-                <span>Стекла</span>
-                <input type="text" name="glass" placeholder="Например: установлены" required>
-            </label>
-            <label>
-                <span>Пол</span>
-                <input type="text" name="floor" placeholder="Например: ламинат" required>
-            </label>
-            <label>
-                <span>Потолок</span>
-                <input type="text" name="ceiling" placeholder="Например: покраска" required>
-            </label>
-            <label class="full-width">
-                <span>Дополнительные</span>
-                <textarea name="additional" rows="4" placeholder="Любые дополнительные замечания"></textarea>
-            </label>
-            <button type="submit" class="primary-btn">Добавить в таблицу</button>
-        </form>
-    </div>
+        <div class="table-card card">
+            <div class="section-title-row">
+                <h3>{{ tab.name }}</h3>
+                <span class="soft-pill">{{ tab.rows|length }} строк</span>
+            </div>
 
-    <div class="table-card card">
-        <div class="section-title-row">
-            <h3>Таблица запуска объекта</h3>
-            <span class="soft-pill">Квартал 100-7</span>
-        </div>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>№ квартиры</th>
-                        <th>Стекла</th>
-                        <th>Пол</th>
-                        <th>Потолок</th>
-                        <th>Дополнительные</th>
-                        <th>Дата</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if records %}
-                        {% for record in records %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ record.apartment_number }}</td>
-                            <td>{{ record.glass }}</td>
-                            <td>{{ record.floor }}</td>
-                            <td>{{ record.ceiling }}</td>
-                            <td>{{ record.additional or '—' }}</td>
-                            <td>{{ record.created_at }}</td>
-                            <td>
-                                <form method="post" action="{{ url_for('delete_record', record_id=record.id) }}">
-                                    <button type="submit" class="danger-btn">Удалить</button>
-                                </form>
-                            </td>
+                            {% for col in tab.columns %}
+                            <th>{{ col }}</th>
+                            {% endfor %}
+                            <th>Дата</th>
+                            <th></th>
                         </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="7" class="empty-state">
-                                Пока записей нет. Добавьте первую запись через форму слева.
-                            </td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% if tab.rows %}
+                            {% for row in tab.rows %}
+                            <tr>
+                                {% for col in tab.columns %}
+                                <td>{{ row.values[col] or '—' }}</td>
+                                {% endfor %}
+                                <td>{{ row.created_at }}</td>
+                                <td>
+                                    <form method="post" action="{{ url_for('delete_tab_row', object_id=object_item.id, tab_id=tab.id, row_id=row.id) }}">
+                                        <button type="submit" class="danger-btn">Удалить</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="{{ tab.columns|length + 2 }}" class="empty-state">
+                                    Пока записей нет для вкладки «{{ tab.name }}».
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+    {% endif %}
+{% endfor %}
 {% endblock %}
