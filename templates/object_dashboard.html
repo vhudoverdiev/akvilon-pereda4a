@@ -1,60 +1,79 @@
 {% extends 'base.html' %}
 {% block title %}{{ object_name }} — Отдел передач Аквилон{% endblock %}
 {% block content %}
-<section class="dashboard-head card">
+<section class="hero-panel card">
     <div>
-        <div class="eyebrow">Объект</div>
-        <h2>{{ object_name }}</h2>
-        <p>Раздел: <strong>Запуск объекта</strong></p>
+        <h2>Hello, <em>Anthony!</em></h2>
+        <p>Here’s your overview of your business!</p>
     </div>
-    <div class="stats-card">
-        <span>Записей в таблице</span>
-        <strong>{{ records|length }}</strong>
+    <div class="hero-actions">
+        <button class="circle-btn" type="button">◔</button>
+        <button class="circle-btn" type="button">🔔</button>
+        <div class="profile-mini">
+            <div class="avatar">A</div>
+            <div>
+                <strong>Anthony Alverizko</strong>
+                <small>anthony.alve@gmail.com</small>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="metrics-grid">
+<section class="metrics-grid metrics-four">
     <article class="metric-card card">
-        <span>Всего квартир</span>
-        <strong>{{ records|length }}</strong>
-        <small>Текущий объём запуска</small>
+        <div class="metric-row"><span>Total Customers</span><i>◍</i></div>
+        <strong>21.978</strong>
+        <small class="up">↗ +15% from the last month</small>
     </article>
     <article class="metric-card card">
-        <span>С заполненными примечаниями</span>
-        <strong>{{ records|selectattr('additional')|list|length }}</strong>
-        <small>Контроль качества заполнения</small>
+        <div class="metric-row"><span>Active Customers</span><i>◌</i></div>
+        <strong>10.369</strong>
+        <small class="down">↘ -9% from the last month</small>
     </article>
     <article class="metric-card card">
-        <span>С актуальной датой</span>
-        <strong>{{ records|length }}</strong>
-        <small>Обновлено сегодня</small>
+        <div class="metric-row"><span>Profit Total</span><i>◔</i></div>
+        <strong>$64.981,97</strong>
+        <small class="up">↗ +7.2% from the last month</small>
+    </article>
+    <article class="metric-card card">
+        <div class="metric-row"><span>Expense Total</span><i>◔</i></div>
+        <strong>$18.158,21</strong>
+        <small class="down">↘ -2% from the last month</small>
     </article>
 </section>
 
 <section class="overview-grid">
     <div class="chart-card card">
         <div class="section-title-row">
-            <h3>Динамика запусков</h3>
-            <span class="soft-pill">2026</span>
+            <h3>Sales Overview</h3>
+            <span class="soft-pill">Month ▾</span>
         </div>
-        <div class="bars">
+        <div class="bars with-grid">
             <span style="--h: 72%"></span><span style="--h: 58%"></span><span style="--h: 40%"></span><span style="--h: 49%"></span>
             <span style="--h: 65%"></span><span style="--h: 82%"></span><span style="--h: 53%"></span><span style="--h: 63%"></span>
             <span style="--h: 37%"></span><span style="--h: 44%"></span><span style="--h: 57%"></span><span style="--h: 68%"></span>
         </div>
     </div>
 
-    <div class="schedule-card card">
-        <div class="section-title-row">
-            <h3>Ближайший график</h3>
-            <span class="soft-pill">Неделя</span>
+    <div class="stack-col">
+        <div class="calendar-card card">
+            <h3>January 2023</h3>
+            <div class="calendar-grid">
+                <span>8</span><span>9</span><span>10</span><span class="active">11</span><span>12</span><span>13</span><span>14</span>
+            </div>
         </div>
-        <ul>
-            <li><strong>09:30</strong><span>Проверка секции А</span></li>
-            <li><strong>11:00</strong><span>Обход этажа №5</span></li>
-            <li><strong>14:15</strong><span>Согласование замечаний</span></li>
-            <li><strong>16:40</strong><span>Отчет по статусу квартир</span></li>
-        </ul>
+        <div class="schedule-card card">
+            <div class="section-title-row">
+                <h3>Upcoming Schedule</h3>
+                <span>···</span>
+            </div>
+            <ul>
+                <li><strong>09:30 AM</strong><span>Business Analytics Press</span></li>
+                <li><strong>10:35 AM</strong><span>Business Sprint</span></li>
+                <li><strong>1:15 PM</strong><span>Customer Review Meeting</span></li>
+                <li><strong>2:45 PM</strong><span>Daily Office Meeting</span></li>
+            </ul>
+        </div>
     </div>
 </section>
 
