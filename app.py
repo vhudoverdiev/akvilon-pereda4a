@@ -203,11 +203,14 @@ def ensure_default_tabs(db: sqlite3.Connection, object_id: int) -> None:
 def home():
     if session.get("admin_logged_in"):
         return redirect(url_for("objects_page"))
-    return redirect(url_for("login"))
+    return render_template("login.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if session.get("admin_logged_in"):
+        return redirect(url_for("objects_page"))
+
     if request.method == "POST":
         login_value = request.form.get("login", "").strip()
         password_value = request.form.get("password", "").strip()
