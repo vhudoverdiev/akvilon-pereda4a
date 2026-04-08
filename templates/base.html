@@ -11,35 +11,44 @@
 </head>
 <body>
     {% if session.get('admin_logged_in') %}
-    <div class="app-layout">
+    <div class="app-layout dashboard-theme">
         <aside class="sidebar">
-            <div class="brand">
-                <h1><span class="brand-main">Аквилон</span><span class="brand-sub">Разумный девелопмент</span></h1>
+            <div class="brand decko-brand">
+                <div class="brand-logo">D</div>
+                <h1>Decko</h1>
             </div>
 
-            <div class="search-box">Поиск...</div>
+            <div class="search-shell">
+                <span class="icon">⌕</span>
+                <div class="search-box">Search here...</div>
+                <kbd>⌘ K</kbd>
+            </div>
 
+            <div class="menu-caption">Main menu</div>
             <nav class="side-nav">
-                <a class="side-link active" href="{{ url_for('object_dashboard') }}">Обзор объекта</a>
-                <a class="side-link" href="#">Аналитика</a>
-                <a class="side-link" href="#">Клиенты</a>
-                <a class="side-link" href="#">Настройки</a>
+                <a class="side-link active" href="{{ url_for('object_dashboard') }}"><span>◧</span>Business Overview</a>
+                <a class="side-link" href="#"><span>◔</span>Analytics</a>
+                <a class="side-link" href="#"><span>◍</span>Business Explore</a>
+                <a class="side-link" href="#"><span>◎</span>Customers</a>
             </nav>
 
-            <div class="sidebar-footer">
-                <a class="side-link muted" href="{{ url_for('logout') }}">Выйти</a>
+            <div class="menu-caption">Settings</div>
+            <nav class="side-nav secondary">
+                <a class="side-link" href="#"><span>✉</span>Messages</a>
+                <a class="side-link" href="#"><span>☆</span>Customer Reviews</a>
+                <a class="side-link" href="#"><span>⚙</span>Settings</a>
+                <a class="side-link" href="#"><span>?</span>Help Centre</a>
+            </nav>
+
+            <div class="sidebar-footer event-card">
+                <div class="event-title">Upcoming event</div>
+                <strong>Business Sprint</strong>
+                <small>10:35 AM - 11:30 AM</small>
+                <a class="event-chip" href="#">Business meeting</a>
             </div>
         </aside>
 
         <div class="content-shell">
-            <header class="topbar">
-                <div>
-                    <div class="eyebrow">Отдел передач</div>
-                    <p class="greeting">Здравствуйте! Управление объектом в одном окне.</p>
-                </div>
-                <a class="ghost-btn" href="{{ url_for('object_dashboard') }}">Квартал 100-7</a>
-            </header>
-
             <main>
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
