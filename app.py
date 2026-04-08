@@ -331,6 +331,14 @@ def delete_tab_row(object_id: int, tab_id: int, row_id: int):
     return redirect(url_for("object_dashboard", object_id=object_id, tab=tab["tab_slug"]))
 
 
-if __name__ == "__main__":
+with app.app_context():
     init_db()
-    app.run(debug=True)
+
+
+if __name__ == "__main__":
+    debug_mode = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(
+        host=os.environ.get("HOST", "0.0.0.0"),
+        port=int(os.environ.get("PORT", "5000")),
+        debug=debug_mode,
+    )
